@@ -1,0 +1,48 @@
+export const recentRequests = [
+  {
+    id: '1',
+    title: 'Fuite évier cuisine',
+    subtitle: 'Analakely',
+    offers: 3,
+    status: 'Offres reçues',
+    category: 'Plomberie',
+    budget: '40 000 - 90 000 Ar',
+    date: 'Dès que possible',
+    description: "L'évier fuit sous le meuble. Je cherche un plombier disponible rapidement.",
+  },
+  {
+    id: '2',
+    title: 'Peinture murale',
+    subtitle: 'Ankorondrano',
+    offers: 0,
+    status: 'En attente',
+    category: 'Peinture',
+    budget: '120 000 - 250 000 Ar',
+    date: 'Cette semaine',
+    description: 'Je veux repeindre un mur de salon avec une couleur claire.',
+  },
+  {
+    id: '3',
+    title: 'Réparation électrique',
+    subtitle: 'Ivandry',
+    offers: 0,
+    status: 'En attente',
+    category: 'Électricité',
+    budget: '30 000 - 80 000 Ar',
+    date: 'Demain matin',
+    description: 'Une prise ne fonctionne plus et le disjoncteur saute parfois.',
+  },
+  {
+    id: '4',
+    title: 'Nettoyage maison',
+    subtitle: 'Isoraka',
+    offers: 0,
+    status: 'En attente',
+    category: 'Nettoyage',
+    budget: '50 000 - 100 000 Ar',
+    date: 'Ce week-end',
+    description: 'Je cherche un nettoyage complet pour un appartement de deux pièces.',
+  },
+];
+
+export const requestFilters = ['Toutes', 'En attente', 'Offres reçues', 'Contact payé'];

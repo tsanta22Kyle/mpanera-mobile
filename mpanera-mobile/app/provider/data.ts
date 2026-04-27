@@ -1,0 +1,38 @@
+export const providerOffers = [
+  {
+    id: '1',
+    title: 'Réparation fuite cuisine',
+    location: 'Analakely',
+    price: '55 000 Ar',
+    status: 'Envoyée',
+    client: 'Mme Rina',
+    schedule: 'Aujourd’hui',
+  },
+  {
+    id: '2',
+    title: 'Peinture salon',
+    location: 'Ankorondrano',
+    price: '180 000 Ar',
+    status: 'En attente',
+    client: 'M. Solo',
+    schedule: 'Demain',
+  },
+  {
+    id: '3',
+    title: 'Installation prise',
+    location: 'Ivandry',
+    price: '45 000 Ar',
+    status: 'Acceptée',
+    client: 'Mme Tiana',
+    schedule: 'Sous 2 jours',
+  },
+  {
+    id: '4',
+    title: 'Nettoyage appartement',
+    location: 'Isoraka',
+    price: '70 000 Ar',
+    status: 'Envoyée',
+    client: 'M. Hery',
+    schedule: 'Ce week-end',
+  },
+];
