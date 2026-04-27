@@ -1,98 +1,58 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { ScrollView, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView className="flex-1 bg-slate-100">
+      <View className="px-6 pb-10 pt-16">
+        <View className="mb-6 rounded-3xl bg-emerald-600 p-6 shadow-sm">
+          <Text className="mb-2 text-xs font-semibold uppercase tracking-[2px] text-emerald-100">
+            NativeWind Test
+          </Text>
+          <Text className="mb-3 text-3xl font-bold text-white">Tailwind is active</Text>
+          <Text className="text-sm leading-6 text-emerald-50">
+            If this screen shows spacing, colors, rounded cards, and styled badges, NativeWind is
+            correctly configured in the Expo app.
+          </Text>
+        </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <View className="mb-6 flex-row gap-3">
+          <View className="rounded-full bg-white px-4 py-2">
+            <Text className="text-xs font-semibold text-slate-700">React Native</Text>
+          </View>
+          <View className="rounded-full bg-white px-4 py-2">
+            <Text className="text-xs font-semibold text-slate-700">Expo</Text>
+          </View>
+          <View className="rounded-full bg-white px-4 py-2">
+            <Text className="text-xs font-semibold text-slate-700">Tailwind</Text>
+          </View>
+        </View>
+
+        <View className="gap-4">
+          <View className="rounded-2xl bg-white p-5 shadow-sm">
+            <Text className="mb-2 text-lg font-bold text-slate-900">Visual checks</Text>
+            <Text className="text-sm leading-6 text-slate-600">
+              This block validates common utility classes like `bg-*`, `text-*`, `p-*`, `rounded-*`
+              and `shadow-*`.
+            </Text>
+          </View>
+
+          <View className="rounded-2xl border border-dashed border-emerald-300 bg-emerald-50 p-5">
+            <Text className="mb-3 text-base font-semibold text-emerald-900">Expected result</Text>
+            <View className="gap-2">
+              <Text className="text-sm text-emerald-800">• Green hero card with white text</Text>
+              <Text className="text-sm text-emerald-800">• White rounded pills under the hero</Text>
+              <Text className="text-sm text-emerald-800">• White and pale green cards with padding</Text>
+            </View>
+          </View>
+
+          <View className="rounded-2xl bg-slate-900 p-5">
+            <Text className="mb-1 text-sm font-semibold uppercase tracking-[1.5px] text-slate-400">
+              Test file
+            </Text>
+            <Text className="text-base font-medium text-white">app/(tabs)/index.tsx</Text>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
