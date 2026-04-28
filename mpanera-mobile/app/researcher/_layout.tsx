@@ -6,6 +6,7 @@ export default function ResearcherLayout() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="requests" />
       <Stack.Screen name="request/[id]" />
+      <Stack.Screen name="request/[id]/payment" />
     </Stack>
   );
 }

@@ -5,90 +5,96 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
-const profileActions = [
-  { icon: 'person-outline' as IoniconName, label: 'Informations personnelles', value: 'Modifier profil' },
-  { icon: 'construct-outline' as IoniconName, label: 'Services proposés', value: 'Plomberie, dépannage' },
-  { icon: 'location-outline' as IoniconName, label: 'Zones d’intervention', value: 'Analakely et alentours' },
-  { icon: 'shield-checkmark-outline' as IoniconName, label: 'Vérification', value: 'Compte vérifié' },
-  { icon: 'chatbubble-ellipses-outline' as IoniconName, label: 'Support', value: 'Centre d’aide' },
+const mainItems = [
+  { icon: 'briefcase-outline' as IoniconName, label: 'Mes offres', value: '24 envoyées' },
+  { icon: 'create-outline' as IoniconName, label: 'Modifier profil' },
+  { icon: 'construct-outline' as IoniconName, label: 'Services proposés', value: 'Plomberie' },
+  { icon: 'chatbubble-ellipses-outline' as IoniconName, label: 'Support' },
 ];
+
+const settingsItems = [
+  { icon: 'location-outline' as IoniconName, label: 'Zones d’intervention', value: 'Analakely' },
+  { icon: 'shield-checkmark-outline' as IoniconName, label: 'Vérification', value: 'Vérifié' },
+  { icon: 'document-text-outline' as IoniconName, label: 'Description' },
+  { icon: 'settings-outline' as IoniconName, label: 'Paramètres' },
+];
+
+function ProfileRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: IoniconName;
+  label: string;
+  value?: string;
+}) {
+  return (
+    <TouchableOpacity className="flex-row items-center py-4">
+      <View className="mr-3 h-10 w-10 items-center justify-center rounded-2xl bg-slate-100">
+        <Ionicons name={icon} size={18} color="#52525B" />
+      </View>
+      <View className="flex-1">
+        <Text className="text-sm font-semibold text-slate-900">{label}</Text>
+      </View>
+      {value ? <Text className="mr-2 text-xs font-medium text-slate-400">{value}</Text> : null}
+      <Ionicons name="chevron-forward" size={16} color="#C4C4C4" />
+    </TouchableOpacity>
+  );
+}
 
 export default function ProviderProfileScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
+    <SafeAreaView className="flex-1 bg-[#F5F5F5]">
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 100 }}>
-        <View className="bg-primary px-5 pb-8 pt-3">
-          <View className="items-center">
-            <View className="mb-4 h-24 w-24 items-center justify-center rounded-full border-4 border-white/20 bg-white/15">
-              <Ionicons name="person" size={42} color="#FFFFFF" />
-            </View>
-            <Text className="text-2xl font-bold text-white">Toky Rakoto</Text>
-            <Text className="mt-2 text-sm text-white/75">Prestataire · Plomberie</Text>
-
-            <View className="mt-4 rounded-full bg-white px-4 py-2">
-              <Text className="text-xs font-bold uppercase tracking-[1.4px] text-primary-accent">
-                Profil vérifié
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <View className="-mt-4 px-5">
-          <View className="mb-5 flex-row gap-3">
-            <View className="flex-1 rounded-3xl bg-white p-4">
-              <Text className="text-xs font-semibold uppercase tracking-[1.2px] text-slate-400">
-                Offres envoyées
-              </Text>
-              <Text className="mt-2 text-3xl font-bold text-slate-900">24</Text>
-              <Text className="mt-1 text-sm text-slate-500">Ce mois-ci</Text>
-            </View>
-            <View className="flex-1 rounded-3xl bg-white p-4">
-              <Text className="text-xs font-semibold uppercase tracking-[1.2px] text-slate-400">
-                Offres acceptées
-              </Text>
-              <Text className="mt-2 text-3xl font-bold text-slate-900">8</Text>
-              <Text className="mt-1 text-sm text-slate-500">Clients intéressés</Text>
-            </View>
-          </View>
-
-          <View className="mb-5 rounded-[28px] bg-white p-5">
-            <Text className="text-xl font-bold text-slate-900">Résumé du profil</Text>
-            <Text className="mt-2 text-sm leading-6 text-slate-600">
-              Votre compte prestataire est actif. Vous pouvez recevoir des demandes, envoyer vos
-              offres et attendre qu&apos;un client vous choisisse.
-            </Text>
-
-            <View className="mt-4 rounded-[24px] bg-primary-soft p-4">
-              <Text className="text-sm font-semibold text-slate-900">Conseil</Text>
-              <Text className="mt-2 text-sm leading-6 text-slate-700">
-                Gardez votre description claire et répondez vite pour recevoir plus de choix.
-              </Text>
-            </View>
-          </View>
-
-          <View className="mb-3 flex-row items-center justify-between">
-            <Text className="text-2xl font-bold text-slate-900">Paramètres du profil</Text>
-            <TouchableOpacity>
-              <Text className="text-sm font-semibold text-primary">Gérer</Text>
+        <View className="bg-[#171717] px-5 pb-10 pt-3">
+          <View className="mb-8 flex-row items-center justify-between">
+            <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-white/10">
+              <Ionicons name="chevron-back" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
+            <Text className="text-lg font-semibold text-white">Compte</Text>
+            <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-white/10">
+              <Ionicons name="notifications-outline" size={18} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
 
-          <View className="gap-3">
-            {profileActions.map((item) => (
-              <TouchableOpacity
-                key={item.label}
-                className="flex-row items-center rounded-[24px] bg-white px-4 py-4">
-                <View className="mr-3 h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Ionicons name={item.icon} size={20} color="#334155" />
-                </View>
-                <View className="flex-1">
-                  <Text className="text-sm font-bold text-slate-900">{item.label}</Text>
-                  <Text className="mt-1 text-sm text-slate-500">{item.value}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+          <View className="items-center">
+            <View className="relative mb-4">
+              <View className="h-24 w-24 items-center justify-center rounded-full border-4 border-white/10 bg-primary-soft">
+                <Ionicons name="construct-outline" size={36} color="#6B6E50" />
+              </View>
+              <TouchableOpacity className="absolute -bottom-1 right-0 h-8 w-8 items-center justify-center rounded-full bg-white">
+                <Ionicons name="camera-outline" size={14} color="#171717" />
               </TouchableOpacity>
+            </View>
+            <Text className="text-2xl font-bold text-white">Toky Rakoto</Text>
+            <Text className="mt-2 text-sm text-white/70">tokypro@email.com</Text>
+          </View>
+        </View>
+
+        <View className="-mt-4 px-4">
+          <View className="mb-4 rounded-[28px] bg-white px-4">
+            {mainItems.map((item, index) => (
+              <View
+                key={item.label}
+                className={index !== mainItems.length - 1 ? 'border-b border-slate-100' : ''}>
+                <ProfileRow icon={item.icon} label={item.label} value={item.value} />
+              </View>
             ))}
           </View>
+
+          <View className="mb-4 rounded-[28px] bg-white px-4">
+            {settingsItems.map((item, index) => (
+              <View
+                key={item.label}
+                className={index !== settingsItems.length - 1 ? 'border-b border-slate-100' : ''}>
+                <ProfileRow icon={item.icon} label={item.label} value={item.value} />
+              </View>
+            ))}
+          </View>
+
+          <TouchableOpacity className="rounded-[24px] bg-white px-4 py-5">
+            <Text className="text-sm font-semibold text-[#E38B7B]">Se déconnecter</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

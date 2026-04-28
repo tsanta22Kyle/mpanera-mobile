@@ -7,6 +7,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="role" />
       <Stack.Screen name="client" />
       <Stack.Screen name="provider" />
+      <Stack.Screen name="provider-verification" />
     </Stack>
   );
 }

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const roleOptions = [
@@ -57,8 +57,6 @@ export default function OnboardingRoleScreen() {
 
           <View className="flex-1 justify-center gap-5 pt-8">
             {roleOptions.map((option) => {
-              const isProvider = option.id === 'provider';
-
               return (
                 <TouchableOpacity
                   key={option.id}

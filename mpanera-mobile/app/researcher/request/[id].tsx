@@ -12,37 +12,60 @@ const sampleOffers = [
 ];
 
 export default function RequestDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, paid, method, providerName, providerPhone, providerEmail } = useLocalSearchParams<{
+    id: string;
+    paid?: string;
+    method?: string;
+    providerName?: string;
+    providerPhone?: string;
+    providerEmail?: string;
+  }>();
   const request = recentRequests.find((item) => item.id === id) ?? recentRequests[0];
+  const paymentDone = paid === '1';
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
-      <View className="bg-primary px-5 pb-5 pt-3">
-        <View className="flex-row items-center justify-between">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
-            <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-
-          <Text className="text-[22px] font-bold text-white">Détail demande</Text>
-
-          <View className="h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
-            <Ionicons name="ellipsis-horizontal" size={18} color="#FFFFFF" />
-          </View>
-        </View>
-      </View>
-
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 28 }}
+        contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-5">
-          <View className="mb-4 rounded-[24px] bg-white p-5 shadow-sm">
+        <View className="px-5 pb-8 pt-3">
+          <View className="mb-8 flex-row items-center justify-between">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+              <Ionicons name="chevron-back" size={20} color="#6B6E50" />
+            </TouchableOpacity>
+
+            <Text className="text-base font-semibold text-slate-400">Demande</Text>
+          </View>
+
+          {paymentDone ? (
+            <View className="mb-6 rounded-[22px] border border-primary bg-primary-soft px-4 py-4">
+              <View className="flex-row items-start">
+                <View className="mr-3 mt-1 h-9 w-9 items-center justify-center rounded-full bg-primary-accent">
+                  <Ionicons name="notifications-outline" size={18} color="#FFFFFF" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-sm font-bold text-slate-900">Paiement confirmé</Text>
+                  <Text className="mt-1 text-sm leading-6 text-slate-700">
+                    Contact débloqué via {method === 'mvola' ? 'Mvola' : 'Orange Money'}.
+                  </Text>
+                  <Text className="mt-3 text-sm font-semibold text-slate-900">
+                    {providerName}
+                  </Text>
+                  <Text className="mt-1 text-sm text-slate-700">{providerPhone}</Text>
+                  <Text className="mt-1 text-sm text-slate-700">{providerEmail}</Text>
+                </View>
+              </View>
+            </View>
+          ) : null}
+
+          <View className="mb-8">
             <View className="mb-4 flex-row items-start justify-between">
               <View className="mr-4 flex-1">
-                <Text className="text-[24px] font-bold text-slate-900">{request.title}</Text>
-                <Text className="mt-2 text-sm font-medium text-slate-400">
+                <Text className="text-[28px] font-bold leading-9 text-slate-900">{request.title}</Text>
+                <Text className="mt-2 text-sm text-slate-500">
                   {request.category} · {request.subtitle}
                 </Text>
               </View>
@@ -53,70 +76,60 @@ export default function RequestDetailScreen() {
             </View>
 
             <Text className="text-sm leading-6 text-slate-600">{request.description}</Text>
+          </View>
 
-            <View className="mt-5 gap-3">
-              <View className="rounded-[18px] bg-slate-50 px-4 py-4">
-                <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-400">
-                  Budget
-                </Text>
-                <Text className="mt-1 text-base font-bold text-slate-900">{request.budget}</Text>
-              </View>
-
-              <View className="rounded-[18px] bg-slate-50 px-4 py-4">
-                <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-400">
-                  Date souhaitée
-                </Text>
-                <Text className="mt-1 text-base font-bold text-slate-900">{request.date}</Text>
-              </View>
-
-              <View className="rounded-[18px] bg-slate-50 px-4 py-4">
-                <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-400">
-                  Offres reçues
-                </Text>
-                <Text className="mt-1 text-base font-bold text-primary">{request.offers}</Text>
-              </View>
+          <View className="mb-8 flex-row gap-3">
+            <View className="flex-1 rounded-[20px] bg-slate-50 px-4 py-4">
+              <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-400">
+                Budget
+              </Text>
+              <Text className="mt-2 text-sm font-bold text-slate-900">{request.budget}</Text>
+            </View>
+            <View className="flex-1 rounded-[20px] bg-slate-50 px-4 py-4">
+              <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-400">
+                Date
+              </Text>
+              <Text className="mt-2 text-sm font-bold text-slate-900">{request.date}</Text>
             </View>
           </View>
 
           <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-[24px] font-bold text-slate-900">Offres disponibles</Text>
-            <TouchableOpacity>
-              <Text className="text-sm font-semibold text-primary">Comparer</Text>
-            </TouchableOpacity>
+            <Text className="text-[24px] font-bold text-slate-900">Offres</Text>
+            <Text className="text-sm font-semibold text-primary">{request.offers}</Text>
           </View>
 
           <View className="gap-3">
             {sampleOffers.slice(0, Math.max(request.offers, 1)).map((offer) => (
-              <TouchableOpacity key={offer.id} className="rounded-[24px] bg-white p-4 shadow-sm">
-                <View className="mb-3 flex-row items-center justify-between">
-                  <View className="flex-row items-center">
-                    <View className="mr-3 h-11 w-11 items-center justify-center rounded-2xl bg-primary-soft">
-                      <Ionicons name="person-outline" size={20} color="#6B6E50" />
-                    </View>
-                    <View>
-                      <Text className="text-base font-bold text-slate-900">{offer.name}</Text>
-                      <Text className="mt-1 text-sm text-slate-500">{offer.rating} ★</Text>
-                    </View>
-                  </View>
-
-                  <View className="rounded-full bg-amber-50 px-3 py-2">
-                    <Text className="text-xs font-bold text-amber-700">{offer.delay}</Text>
-                  </View>
-                </View>
-
+              <TouchableOpacity key={offer.id} className="rounded-[22px] bg-slate-50 px-4 py-4">
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-lg font-bold text-primary">{offer.price}</Text>
-                  <View className="h-10 w-10 items-center justify-center rounded-full bg-primary-accent">
-                    <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+                  <View className="flex-1 pr-3">
+                    <Text className="text-base font-bold text-slate-900">{offer.name}</Text>
+                    <Text className="mt-1 text-sm text-slate-500">
+                      {offer.rating} ★ · {offer.delay}
+                    </Text>
                   </View>
+
+                  <Text className="text-base font-bold text-primary">{offer.price}</Text>
                 </View>
               </TouchableOpacity>
             ))}
           </View>
 
-          <TouchableOpacity className="mt-5 rounded-[24px] bg-primary px-5 py-5">
-            <Text className="text-center text-base font-bold text-white">Voir toutes les offres</Text>
-          </TouchableOpacity>
+          {paymentDone ? (
+            <TouchableOpacity className="mt-6 rounded-[24px] bg-primary-soft px-5 py-5">
+              <Text className="text-center text-base font-bold text-slate-900">
+                Contact déjà débloqué
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => router.push(`/researcher/request/${request.id}/payment`)}
+              className="mt-6 rounded-[24px] bg-primary px-5 py-5">
+              <Text className="text-center text-base font-bold text-white">
+                Payer les frais de contact
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
