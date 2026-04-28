@@ -2,14 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { recentRequests } from '../data';
-
-const sampleOffers = [
-  { id: '1', name: 'Toky Services', price: '55 000 Ar', delay: 'Aujourd’hui', rating: '4.8' },
-  { id: '2', name: 'Rija Pro', price: '65 000 Ar', delay: 'Demain', rating: '4.6' },
-  { id: '3', name: 'Mamy Express', price: '70 000 Ar', delay: 'Sous 2 jours', rating: '4.7' },
-];
+import { useRequestStore } from '@/store/useRequestStore';
+import { useOfferStore } from '@/store/useOfferStore';
 
 export default function RequestDetailScreen() {
   const { id, paid, method, providerName, providerPhone, providerEmail } = useLocalSearchParams<{
@@ -20,7 +14,10 @@ export default function RequestDetailScreen() {
     providerPhone?: string;
     providerEmail?: string;
   }>();
-  const request = recentRequests.find((item) => item.id === id) ?? recentRequests[0];
+  
+  const requests = useRequestStore((state) => state.requests);
+  const sampleOffers = useOfferStore((state) => state.sampleOffers);
+  const request = requests.find((item) => item.id === id) ?? requests[0];
   const paymentDone = paid === '1';
 
   return (
@@ -95,38 +92,39 @@ export default function RequestDetailScreen() {
 
           <View className="mb-4 flex-row items-center justify-between">
             <Text className="text-[24px] font-bold text-slate-900">Offres</Text>
-            <Text className="text-sm font-semibold text-primary">{request.offers}</Text>
+            <Text className="text-sm font-semibold text-primary">{request.offers || sampleOffers.length}</Text>
           </View>
 
           <View className="gap-3">
-            {sampleOffers.slice(0, Math.max(request.offers, 1)).map((offer) => (
-              <TouchableOpacity key={offer.id} className="rounded-[22px] bg-slate-50 px-4 py-4">
+            {sampleOffers.map((offer) => (
+              <TouchableOpacity 
+                key={offer.id} 
+                onPress={() => router.push(`/researcher/request/${request.id}/offer/${offer.id}`)}
+                className="rounded-[22px] bg-slate-50 px-4 py-4 shadow-sm border border-slate-100">
                 <View className="flex-row items-center justify-between">
                   <View className="flex-1 pr-3">
                     <Text className="text-base font-bold text-slate-900">{offer.name}</Text>
-                    <Text className="mt-1 text-sm text-slate-500">
-                      {offer.rating} ★ · {offer.delay}
-                    </Text>
+                    <View className="mt-1 flex-row items-center">
+                      <Ionicons name="star" size={12} color="#F59E0B" />
+                      <Text className="ml-1 text-xs text-slate-500">
+                        {offer.rating} · {offer.delay}
+                      </Text>
+                    </View>
                   </View>
 
-                  <Text className="text-base font-bold text-primary">{offer.price}</Text>
+                  <View className="items-end">
+                    <Text className="text-base font-bold text-primary">{offer.price}</Text>
+                    <Text className="text-[10px] text-slate-400">Voir détails</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             ))}
           </View>
 
-          {paymentDone ? (
+          {paymentDone && (
             <TouchableOpacity className="mt-6 rounded-[24px] bg-primary-soft px-5 py-5">
               <Text className="text-center text-base font-bold text-slate-900">
                 Contact déjà débloqué
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => router.push(`/researcher/request/${request.id}/payment`)}
-              className="mt-6 rounded-[24px] bg-primary px-5 py-5">
-              <Text className="text-center text-base font-bold text-white">
-                Payer les frais de contact
               </Text>
             </TouchableOpacity>
           )}

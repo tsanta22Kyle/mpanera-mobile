@@ -1,10 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-// import * as Notifications from 'expo-notifications';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { recentRequests } from '../../data';
+import { useRequestStore } from '@/store/useRequestStore';
 
 const paymentOptions = [
   {
@@ -29,24 +27,11 @@ const unlockedProvider = {
 
 export default function RequestPaymentScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const request = recentRequests.find((item) => item.id === id) ?? recentRequests[0];
+  const { requests, updateRequestStatus } = useRequestStore();
+  const request = requests.find((item) => item.id === id) ?? requests[0];
 
   const confirmPayment = async (method: 'orange-money' | 'mvola') => {
-    // const permission = await Notifications.requestPermissionsAsync();
-
-    // if (permission.status === 'granted') {
-    //   await Notifications.scheduleNotificationAsync({
-    //     content: {
-    //       title: 'Paiement confirmé',
-    //       body: `${unlockedProvider.name} est débloqué. ${unlockedProvider.phone}`,
-    //       data: {
-    //         requestId: request.id,
-    //         providerName: unlockedProvider.name,
-    //       },
-    //     },
-    //     trigger: null,
-    //   });
-    // }
+    updateRequestStatus(request.id, 'Contact payé');
 
     router.replace({
       pathname: '/researcher/request/[id]',

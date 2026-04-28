@@ -1,9 +1,49 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { ScrollView, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function ClientOnboardingScreen() {
+  const setUser = useUserStore((state) => state.setUser);
+  const setAuthenticated = useUserStore((state) => state.setAuthenticated);
+  const setOnboardingComplete = useUserStore((state) => state.setOnboardingComplete);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    password: '',
+  });
+
+  const handleCreateAccount = () => {
+    setIsLoading(true);
+    
+    // Simuler un temps de création de compte
+    setTimeout(() => {
+      setUser({
+        fullName: form.fullName,
+        phone: form.phone,
+        email: form.email,
+      });
+      setAuthenticated(true);
+      setOnboardingComplete(true);
+      setIsLoading(false);
+      router.replace('/researcher');
+    }, 1500);
+  };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+        <ActivityIndicator size="large" color="#6B6E50" />
+        <Text className="mt-4 text-slate-500 font-medium">Création de votre compte...</Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView
@@ -40,6 +80,8 @@ export default function ClientOnboardingScreen() {
               <TextInput
                 placeholder="Votre nom complet"
                 placeholderTextColor="#94A3B8"
+                value={form.fullName}
+                onChangeText={(text) => setForm({ ...form, fullName: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -50,6 +92,8 @@ export default function ClientOnboardingScreen() {
                 placeholder="034 XX XXX XX"
                 placeholderTextColor="#94A3B8"
                 keyboardType="phone-pad"
+                value={form.phone}
+                onChangeText={(text) => setForm({ ...form, phone: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -61,6 +105,8 @@ export default function ClientOnboardingScreen() {
                 placeholderTextColor="#94A3B8"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                value={form.email}
+                onChangeText={(text) => setForm({ ...form, email: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -71,12 +117,14 @@ export default function ClientOnboardingScreen() {
                 placeholder="Créer un mot de passe"
                 placeholderTextColor="#94A3B8"
                 secureTextEntry
+                value={form.password}
+                onChangeText={(text) => setForm({ ...form, password: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
 
             <TouchableOpacity
-              onPress={() => router.replace('/researcher')}
+              onPress={handleCreateAccount}
               className="rounded-[26px] bg-primary px-5 py-5">
               <Text className="text-center text-base font-bold text-white">Créer mon compte</Text>
             </TouchableOpacity>

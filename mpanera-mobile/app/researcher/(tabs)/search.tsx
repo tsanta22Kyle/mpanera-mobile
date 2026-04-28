@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const categories = ['Plomberie', 'Électricité', 'Peinture', 'Nettoyage', 'Beauté', 'Informatique'];
+const categories = ['Toutes', 'Plomberie', 'Électricité', 'Peinture', 'Nettoyage', 'Beauté', 'Informatique'];
 
-const providers = [
+const providersData = [
   {
     id: '1',
     name: 'Toky Plumbing',
@@ -35,6 +37,17 @@ const providers = [
 ];
 
 export default function ResearcherSearchScreen() {
+  const [searchText, setSearchText] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Toutes');
+
+  const filteredProviders = providersData.filter((provider) => {
+    const matchesSearch = provider.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                         provider.area.toLowerCase().includes(searchText.toLowerCase()) ||
+                         provider.category.toLowerCase().includes(searchText.toLowerCase());
+    const matchesCategory = selectedCategory === 'Toutes' || provider.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-slate-100">
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 100 }}>
@@ -52,6 +65,8 @@ export default function ResearcherSearchScreen() {
             <TextInput
               placeholder="Chercher plomberie, nettoyage, quartier..."
               placeholderTextColor="#94A3B8"
+              value={searchText}
+              onChangeText={setSearchText}
               className="ml-3 flex-1 text-base text-slate-900"
             />
           </View>
@@ -61,17 +76,19 @@ export default function ResearcherSearchScreen() {
           <View className="mb-5 rounded-[28px] bg-white p-4">
             <Text className="mb-3 text-lg font-bold text-slate-900">Catégories populaires</Text>
             <View className="flex-row flex-wrap gap-2">
-              {categories.map((category, index) =>
-                index === 0 ? (
-                  <TouchableOpacity key={category} className="rounded-full bg-primary px-4 py-3">
-                    <Text className="text-sm font-semibold text-white">{category}</Text>
+              {categories.map((category) => {
+                const isSelected = selectedCategory === category;
+                return (
+                  <TouchableOpacity
+                    key={category}
+                    onPress={() => setSelectedCategory(category)}
+                    className={`rounded-full px-4 py-3 ${isSelected ? 'bg-primary' : 'bg-slate-100'}`}>
+                    <Text className={`text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-700'}`}>
+                      {category}
+                    </Text>
                   </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity key={category} className="rounded-full bg-slate-100 px-4 py-3">
-                    <Text className="text-sm font-semibold text-slate-700">{category}</Text>
-                  </TouchableOpacity>
-                )
-              )}
+                );
+              })}
             </View>
           </View>
 
@@ -94,13 +111,13 @@ export default function ResearcherSearchScreen() {
 
           <View className="mb-3 flex-row items-center justify-between">
             <Text className="text-2xl font-bold text-slate-900">Prestataires conseillés</Text>
-            <TouchableOpacity>
-              <Text className="text-sm font-semibold text-primary">Filtrer</Text>
+            <TouchableOpacity onPress={() => {setSearchText(''); setSelectedCategory('Toutes');}}>
+              <Text className="text-sm font-semibold text-primary">Réinitialiser</Text>
             </TouchableOpacity>
           </View>
 
           <View className="gap-3">
-            {providers.map((provider) => (
+            {filteredProviders.map((provider) => (
               <TouchableOpacity key={provider.id} className="rounded-[28px] bg-white p-4">
                 <View className="flex-row items-start justify-between">
                   <View className="mr-4 flex-1">
@@ -135,7 +152,9 @@ export default function ResearcherSearchScreen() {
                       Voir profil
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity className="flex-1 rounded-2xl bg-primary-accent px-4 py-3">
+                  <TouchableOpacity 
+                    onPress={() => router.push('/researcher/request/create')}
+                    className="flex-1 rounded-2xl bg-primary-accent px-4 py-3">
                     <Text className="text-center text-sm font-semibold text-white">
                       Poster une demande
                     </Text>

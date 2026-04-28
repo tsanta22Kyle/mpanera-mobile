@@ -1,11 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRequestStore } from '@/store/useRequestStore';
 
-import { recentRequests, requestFilters } from './data';
+const requestFilters = ['Toutes', 'En attente', 'Offres reçues', 'Contact payé'];
 
 export default function ResearcherRequestsScreen() {
+  const requests = useRequestStore((state) => state.requests);
+  const [selectedFilter, setSelectedFilter] = useState('Toutes');
+
+  const filteredRequests = requests.filter((request) => {
+    if (selectedFilter === 'Toutes') return true;
+    return request.status === selectedFilter;
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-slate-100">
       <View className="bg-primary px-5 pb-5 pt-3">
@@ -32,27 +42,30 @@ export default function ResearcherRequestsScreen() {
           <View className="mb-5 rounded-[24px] bg-white p-4">
             <Text className="mb-3 text-lg font-bold text-slate-900">Filtres simples</Text>
             <View className="flex-row flex-wrap gap-2">
-              {requestFilters.map((filter, index) =>
-                index === 0 ? (
-                  <TouchableOpacity key={filter} className="rounded-full bg-primary px-4 py-3">
-                    <Text className="text-sm font-semibold text-white">{filter}</Text>
+              {requestFilters.map((filter) => {
+                const isSelected = selectedFilter === filter;
+                return (
+                  <TouchableOpacity
+                    key={filter}
+                    onPress={() => setSelectedFilter(filter)}
+                    className={`rounded-full px-4 py-3 ${isSelected ? 'bg-primary' : 'bg-slate-100'}`}>
+                    <Text
+                      className={`text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-700'}`}>
+                      {filter}
+                    </Text>
                   </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity key={filter} className="rounded-full bg-slate-100 px-4 py-3">
-                    <Text className="text-sm font-semibold text-slate-700">{filter}</Text>
-                  </TouchableOpacity>
-                )
-              )}
+                );
+              })}
             </View>
           </View>
 
           <View className="mb-4 flex-row items-center justify-between">
             <Text className="text-[24px] font-bold text-slate-900">Demandes</Text>
-            <Text className="text-sm font-semibold text-slate-500">{recentRequests.length} au total</Text>
+            <Text className="text-sm font-semibold text-slate-500">{filteredRequests.length} au total</Text>
           </View>
 
           <View className="gap-3">
-            {recentRequests.map((request) => (
+            {filteredRequests.map((request) => (
               <TouchableOpacity
                 key={request.id}
                 onPress={() => router.push(`/researcher/request/${request.id}`)}

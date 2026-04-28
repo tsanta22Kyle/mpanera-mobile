@@ -1,23 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import type { ComponentProps } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useUserStore } from '@/store/useUserStore';
 
 type IoniconName = ComponentProps<typeof Ionicons>['name'];
-
-const mainItems = [
-  { icon: 'wallet-outline' as IoniconName, label: 'Paiements', value: '1 contact débloqué' },
-  { icon: 'create-outline' as IoniconName, label: 'Modifier profil' },
-  { icon: 'document-text-outline' as IoniconName, label: 'Mes demandes', value: '4 actives' },
-  { icon: 'chatbubble-ellipses-outline' as IoniconName, label: 'Support' },
-];
-
-const settingsItems = [
-  { icon: 'location-outline' as IoniconName, label: 'Zone enregistrée', value: 'Antananarivo I' },
-  { icon: 'mail-outline' as IoniconName, label: 'Adresse email', value: 'sarah@email.com' },
-  { icon: 'shield-checkmark-outline' as IoniconName, label: 'Sécurité' },
-  { icon: 'settings-outline' as IoniconName, label: 'Paramètres' },
-];
 
 function ProfileRow({
   icon,
@@ -43,12 +31,35 @@ function ProfileRow({
 }
 
 export default function ResearcherProfileScreen() {
+  const { user, logout } = useUserStore();
+
+  const handleLogout = () => {
+    logout();
+    router.replace('/onboarding');
+  };
+
+  const mainItems = [
+    { icon: 'wallet-outline' as IoniconName, label: 'Paiements', value: '0 contact débloqué' },
+    { icon: 'create-outline' as IoniconName, label: 'Modifier profil' },
+    { icon: 'document-text-outline' as IoniconName, label: 'Mes demandes', value: '0 active' },
+    { icon: 'chatbubble-ellipses-outline' as IoniconName, label: 'Support' },
+  ];
+
+  const settingsItems = [
+    { icon: 'location-outline' as IoniconName, label: 'Zone enregistrée', value: 'Antananarivo' },
+    { icon: 'mail-outline' as IoniconName, label: 'Adresse email', value: user?.email || 'Non renseigné' },
+    { icon: 'shield-checkmark-outline' as IoniconName, label: 'Sécurité' },
+    { icon: 'settings-outline' as IoniconName, label: 'Paramètres' },
+  ];
+
   return (
     <SafeAreaView className="flex-1 bg-[#F5F5F5]">
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 100 }}>
         <View className="bg-[#171717] px-5 pb-10 pt-3">
           <View className="mb-8 flex-row items-center justify-between">
-            <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-white/10">
+            <TouchableOpacity 
+              onPress={() => router.back()}
+              className="h-10 w-10 items-center justify-center rounded-full bg-white/10">
               <Ionicons name="chevron-back" size={18} color="#FFFFFF" />
             </TouchableOpacity>
             <Text className="text-lg font-semibold text-white">Compte</Text>
@@ -66,8 +77,8 @@ export default function ResearcherProfileScreen() {
                 <Ionicons name="camera-outline" size={14} color="#171717" />
               </TouchableOpacity>
             </View>
-            <Text className="text-2xl font-bold text-white">Sarah Randria</Text>
-            <Text className="mt-2 text-sm text-white/70">sarah@email.com</Text>
+            <Text className="text-2xl font-bold text-white">{user?.fullName || 'Utilisateur'}</Text>
+            <Text className="mt-2 text-sm text-white/70">{user?.phone || 'Pas de numéro'}</Text>
           </View>
         </View>
 
@@ -92,7 +103,9 @@ export default function ResearcherProfileScreen() {
             ))}
           </View>
 
-          <TouchableOpacity className="rounded-[24px] bg-white px-4 py-5">
+          <TouchableOpacity 
+            onPress={handleLogout}
+            className="rounded-[24px] bg-white px-4 py-5">
             <Text className="text-sm font-semibold text-[#E38B7B]">Se déconnecter</Text>
           </TouchableOpacity>
         </View>

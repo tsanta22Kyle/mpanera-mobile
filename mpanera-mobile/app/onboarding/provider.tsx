@@ -1,9 +1,31 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function ProviderOnboardingScreen() {
+  const setUser = useUserStore((state) => state.setUser);
+  
+  const [form, setForm] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    service: '',
+    password: '',
+  });
+
+  const handleContinue = () => {
+    setUser({
+      fullName: form.fullName,
+      phone: form.phone,
+      email: form.email,
+      service: form.service,
+    });
+    router.push('/onboarding/provider-verification');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView
@@ -40,6 +62,8 @@ export default function ProviderOnboardingScreen() {
               <TextInput
                 placeholder="Votre nom complet"
                 placeholderTextColor="#94A3B8"
+                value={form.fullName}
+                onChangeText={(text) => setForm({ ...form, fullName: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -50,6 +74,8 @@ export default function ProviderOnboardingScreen() {
                 placeholder="034 XX XXX XX"
                 placeholderTextColor="#94A3B8"
                 keyboardType="phone-pad"
+                value={form.phone}
+                onChangeText={(text) => setForm({ ...form, phone: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -61,6 +87,8 @@ export default function ProviderOnboardingScreen() {
                 placeholderTextColor="#94A3B8"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                value={form.email}
+                onChangeText={(text) => setForm({ ...form, email: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -70,6 +98,8 @@ export default function ProviderOnboardingScreen() {
               <TextInput
                 placeholder="Ex: plomberie"
                 placeholderTextColor="#94A3B8"
+                value={form.service}
+                onChangeText={(text) => setForm({ ...form, service: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
@@ -80,12 +110,14 @@ export default function ProviderOnboardingScreen() {
                 placeholder="Créer un mot de passe"
                 placeholderTextColor="#94A3B8"
                 secureTextEntry
+                value={form.password}
+                onChangeText={(text) => setForm({ ...form, password: text })}
                 className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-4 text-base text-slate-900"
               />
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push('/onboarding/provider-verification')}
+              onPress={handleContinue}
               className="rounded-[26px] bg-primary px-5 py-5">
               <Text className="text-center text-base font-bold text-white">Continuer</Text>
             </TouchableOpacity>

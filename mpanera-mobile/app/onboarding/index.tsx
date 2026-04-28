@@ -26,8 +26,9 @@ export default function OnboardingWelcomeScreen() {
             />
 
             <Text className="mt-8 text-center text-[32px] font-bold leading-10 text-slate-900">
-              Bienvenue sur Mpanera
+              Bienvenue sur 
             </Text>
+            <Image source={require('@/assets/images/logo.png')} ></Image>
             <Text className="mt-4 max-w-[320px] text-center text-sm leading-6 text-slate-500">
               Trouvez un prestataire ou proposez vos services en quelques étapes simples.
             </Text>

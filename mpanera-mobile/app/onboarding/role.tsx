@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useUserStore } from '@/store/useUserStore';
 
 const roleOptions = [
   {
@@ -27,7 +28,10 @@ const roleOptions = [
 ] as const;
 
 export default function OnboardingRoleScreen() {
+  const setRole = useUserStore((state) => state.setRole);
+
   const goToRole = (nextRole: 'client' | 'provider') => {
+    setRole(nextRole);
     const target = roleOptions.find((item) => item.id === nextRole)?.route;
     if (target) {
       router.push(target as '/onboarding/client' | '/onboarding/provider');
